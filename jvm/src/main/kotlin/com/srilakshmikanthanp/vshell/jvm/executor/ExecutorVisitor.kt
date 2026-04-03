@@ -165,7 +165,7 @@ class ExecutorVisitor(
   }
 
   override fun visitTemplateString(node: TemplateStringNode): ExecutionShellNode {
-    val segments = node.segments.map { it.accept(this).asExpressionShellNode().asLiteralShellNode().asStringLiteralShellNode() }
-    return StringLiteralShellNode(segments.joinToString(separator = "") { it.value })
+    val segments = node.segments.map { it.accept(this).asExpressionShellNode().asLiteralShellNode().toString() }
+    return StringLiteralShellNode(segments.joinToString(separator = "") { it })
   }
 }
