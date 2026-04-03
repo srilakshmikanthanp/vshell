@@ -17,6 +17,7 @@ dependencies {
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.kotlin.reflect)
   implementation(libs.antlr4.runtime)
+  implementation(libs.commons.io)
   antlr(libs.antlr4)
   testImplementation(libs.kotlin.test)
 }
