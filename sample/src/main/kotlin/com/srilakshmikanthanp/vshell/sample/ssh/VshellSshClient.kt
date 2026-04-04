@@ -42,6 +42,8 @@ class VshellSshClient(private val params: ShellParams): Runnable {
       CdCommand.CdCommandBuilder(),
       LsCommand.LsCommandBuilder(),
       ExitCommand.ExitCommandBuilder(),
+      ExportCommand.ExportCommandBuilder(),
+      SetCommand.SetCommandBuilder()
     ).forEach {
       commandBuilderRegistry.register(it)
     }

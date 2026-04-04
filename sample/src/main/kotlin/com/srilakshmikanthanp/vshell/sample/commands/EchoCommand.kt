@@ -6,10 +6,13 @@ import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderDescriptor
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import java.io.InputStream
 import java.io.OutputStream
+import java.io.PrintWriter
 
 class EchoCommand(private val context: Context, private val args: List<String>) : Command {
   override fun execute(stdIn: InputStream, stdOut: OutputStream, stdErr: OutputStream): Int {
-    stdOut.write(args.joinToString(" ", postfix = "\n").toByteArray())
+    PrintWriter(stdOut).use { out ->
+      out.println(args.joinToString(" "))
+    }
     return 0
   }
 
