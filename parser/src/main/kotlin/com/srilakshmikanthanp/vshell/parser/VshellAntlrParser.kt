@@ -12,6 +12,8 @@ class VshellAntlrParser : VshellParser {
   override fun parse(input: String): Node {
     val stream = CharStreams.fromString(input)
     val lexer = VShellLexer(stream)
+    lexer.removeErrorListeners()
+    lexer.addErrorListener(VshellParserErrorListener())
     val tokenStream = CommonTokenStream(lexer)
     val parser = VShellParser(tokenStream)
     parser.errorHandler = BailErrorStrategy()
