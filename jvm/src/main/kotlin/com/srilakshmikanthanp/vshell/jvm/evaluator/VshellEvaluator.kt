@@ -14,21 +14,21 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VshellEvaluator(
-  val commandBuilderRegistry: CommandBuilderRegistry,
+  commandBuilderRegistry: CommandBuilderRegistry,
   context: Context,
-  stdIn: InputStream,
-  stdOut: OutputStream,
-  stdErr: OutputStream,
+  private val stdIn: InputStream,
+  private val stdOut: OutputStream,
+  private val stdErr: OutputStream,
 ) {
   private val executorVisitor = ExecutorVisitor(context, StdOutSubstitutor(), commandBuilderRegistry)
   private val parser : VshellParser = VshellAntlrParser()
-  private val stdOut = CloseShieldOutputStream.wrap(stdOut)
-  private val stdIn = CloseShieldInputStream.wrap(stdIn)
-  private val stdErr = CloseShieldOutputStream.wrap(stdErr)
 
   fun evaluate(input: String) {
+    val commandStdOut = CloseShieldOutputStream.wrap(stdOut)
+    val commandStdIn = CloseShieldInputStream.wrap(stdIn)
+    val commandStdErr = CloseShieldOutputStream.wrap(stdErr)
     val tree = parser.parse(input)
     val node = tree.accept(executorVisitor) as? CommandsShellNode ?: throw VshellSyntaxException("$input is not a command")
-    node.commands.forEach { it.execute(stdIn, stdOut, stdErr) }
+    node.commands.forEach { it.execute(commandStdIn, commandStdOut, commandStdErr) }
   }
 }
