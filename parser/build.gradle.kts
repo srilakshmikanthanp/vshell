@@ -3,7 +3,7 @@ plugins {
   antlr
 }
 
-group = "com.srilakshmikanthanp.vshell.jvm"
+group = "com.srilakshmikanthanp.vshell.core"
 version = "1.0.0"
 
 repositories {
@@ -13,13 +13,13 @@ repositories {
 dependencies {
   implementation(platform(libs.koin.bom))
   implementation(libs.koin.core)
-  implementation(project(":parser"))
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.kotlin.reflect)
   implementation(libs.antlr4.runtime)
-  implementation(libs.commons.io)
   antlr(libs.antlr4)
+  implementation(project(":core"))
   testImplementation(libs.kotlin.test)
+  testImplementation("org.junit.jupiter:junit-jupiter-params")
 }
 
 tasks.test {
@@ -27,7 +27,12 @@ tasks.test {
 }
 
 kotlin {
-  jvmToolchain(21)
+  jvmToolchain(17)
+}
+
+tasks.generateGrammarSource {
+  arguments = arguments + listOf("-long-messages", "-no-listener", "-visitor", "-package", "com.srilakshmikanthanp.vshell.core")
+  outputDirectory = file("${layout.buildDirectory.get()}/generated-src/antlr/main/java/com/srilakshmikanthanp/vshell/core")
 }
 
 tasks.compileKotlin {

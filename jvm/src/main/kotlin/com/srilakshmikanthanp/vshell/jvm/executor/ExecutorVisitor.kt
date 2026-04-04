@@ -1,6 +1,6 @@
 package com.srilakshmikanthanp.vshell.jvm.executor
 
-import com.srilakshmikanthanp.vshell.core.ast.*
+import com.srilakshmikanthanp.vshell.parser.ast.*
 import com.srilakshmikanthanp.vshell.jvm.command.operator.AndOperatorCommand
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderRegistry
 import com.srilakshmikanthanp.vshell.jvm.command.operator.OrOperatorCommand

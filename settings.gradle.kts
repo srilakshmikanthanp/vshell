@@ -4,4 +4,4 @@ plugins {
 
 rootProject.name = "vshell"
 
-include("core", "jvm")
+include("core", "parser", "jvm")

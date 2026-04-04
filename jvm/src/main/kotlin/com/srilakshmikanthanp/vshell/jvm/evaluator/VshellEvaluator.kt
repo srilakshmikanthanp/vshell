@@ -1,8 +1,8 @@
 package com.srilakshmikanthanp.vshell.jvm.evaluator
 
-import com.srilakshmikanthanp.vshell.core.parser.VshellAntlrParser
-import com.srilakshmikanthanp.vshell.core.parser.VshellParser
-import com.srilakshmikanthanp.vshell.core.parser.VshellSyntaxException
+import com.srilakshmikanthanp.vshell.parser.VshellAntlrParser
+import com.srilakshmikanthanp.vshell.parser.VshellParser
+import com.srilakshmikanthanp.vshell.parser.VshellSyntaxException
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderRegistry
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.executor.CommandsShellNode
