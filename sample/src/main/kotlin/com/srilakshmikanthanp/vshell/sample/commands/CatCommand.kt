@@ -10,12 +10,19 @@ import java.io.OutputStream
 import java.nio.file.Files
 import kotlin.io.path.Path
 import kotlin.io.path.exists
+import kotlin.io.path.isRegularFile
 
 class CatCommand(private val context: Context, private val args: List<String>): Command {
   override fun execute(stdIn: InputStream, stdOut: OutputStream, stdErr: OutputStream): Int {
     try {
       args.stream().map { context.getCurrentWorkingDirectory().resolve(Path(it.trim())) }.forEach {
-        stdOut.write(if (it.exists()) Files.readAllBytes(it) else "cat: ${it.fileName}: No such file\n".toByteArray())
+        if (!it.exists()) {
+          stdOut.write("cat: ${it.fileName}: No such file\n".toByteArray())
+        } else if (!it.isRegularFile()) {
+          stdOut.write("cat: ${it.fileName}: Not a file\n".toByteArray())
+        } else {
+          stdOut.write(Files.readAllBytes(it))
+        }
       }
       return 0
     } catch (e: IOException) {
