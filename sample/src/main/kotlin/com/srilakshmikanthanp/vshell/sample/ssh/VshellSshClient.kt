@@ -72,6 +72,10 @@ class VshellSshClient(private val params: ShellParams): Runnable {
         params.terminal.writer().println("^D")
         params.terminal.writer().flush()
         break
+      } catch (e: ExitException) {
+        params.terminal.writer().println("Bye")
+        params.terminal.writer().flush()
+        break
       } catch (e: Exception) {
         params.terminal.writer().println("Error: ${e.message}")
       }
