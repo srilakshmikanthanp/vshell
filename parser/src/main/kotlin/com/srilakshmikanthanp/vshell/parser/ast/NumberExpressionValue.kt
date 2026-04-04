@@ -1,6 +1,6 @@
 package com.srilakshmikanthanp.vshell.parser.ast
 
-sealed class NumberExpressionValue(val value: Number) : LiteralExpression
+sealed class NumberExpressionValue(open val value: Number) : LiteralExpression
 
 fun LiteralExpression.asVShellNumberValue(): NumberExpressionValue {
   return this as? NumberExpressionValue ?: throw NodeMisMatchException(

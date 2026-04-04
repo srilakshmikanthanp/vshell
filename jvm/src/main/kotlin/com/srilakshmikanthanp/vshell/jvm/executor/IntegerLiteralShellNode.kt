@@ -1,6 +1,6 @@
 package com.srilakshmikanthanp.vshell.jvm.executor
 
-class IntegerLiteralShellNode (override val value: Int): NumberLiteralShellNode(value) {
+class IntegerLiteralShellNode (override val value: Long): NumberLiteralShellNode(value) {
   override fun minus(other: ExecutionShellNode): ExecutionShellNode {
     return when (other) {
       is NumericLiteralShellNode -> NumericLiteralShellNode(this.value.toDouble() - other.value)

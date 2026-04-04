@@ -1,6 +1,6 @@
 package com.srilakshmikanthanp.vshell.parser.ast
 
-class IntegerExpressionValue(value: Long) : NumberExpressionValue(value) {
+class IntegerExpressionValue(override val value: Long) : NumberExpressionValue(value) {
   override fun <R> accept(visitor: NodeVisitor<R>): R {
     return visitor.visitInteger(this)
   }

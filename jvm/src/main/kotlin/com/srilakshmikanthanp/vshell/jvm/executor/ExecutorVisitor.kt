@@ -145,7 +145,7 @@ class ExecutorVisitor(
   }
 
   override fun visitNumeric(node: NumericExpressionValue): ExecutionShellNode {
-    return NumericLiteralShellNode(node.value.toDouble())
+    return NumericLiteralShellNode(node.value)
   }
 
   override fun visitBoolean(node: BooleanExpressionValue): ExecutionShellNode {
@@ -157,7 +157,7 @@ class ExecutorVisitor(
   }
 
   override fun visitInteger(node: IntegerExpressionValue): ExecutionShellNode {
-    return IntegerLiteralShellNode(node.value.toInt())
+    return IntegerLiteralShellNode(node.value)
   }
 
   override fun visitIdentifier(node: IdentifierNode): ExecutionShellNode {

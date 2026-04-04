@@ -1,6 +1,6 @@
 package com.srilakshmikanthanp.vshell.parser.ast
 
-class NumericExpressionValue(value: Double) : NumberExpressionValue(value) {
+class NumericExpressionValue(override val value: Double) : NumberExpressionValue(value) {
   override fun <R> accept(visitor: NodeVisitor<R>): R {
     return visitor.visitNumeric(this)
   }
