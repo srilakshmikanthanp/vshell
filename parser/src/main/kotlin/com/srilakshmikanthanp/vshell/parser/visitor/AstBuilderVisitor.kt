@@ -1,7 +1,8 @@
 package com.srilakshmikanthanp.vshell.parser.visitor
 
-import com.srilakshmikanthanp.vshell.parser.VShellParser
-import com.srilakshmikanthanp.vshell.parser.VShellParserBaseVisitor
+
+import com.srilakshmikanthanp.vshell.core.VShellParser
+import com.srilakshmikanthanp.vshell.core.VShellParserBaseVisitor
 import com.srilakshmikanthanp.vshell.parser.ast.*
 
 class AstBuilderVisitor: VShellParserBaseVisitor<Node>() {
