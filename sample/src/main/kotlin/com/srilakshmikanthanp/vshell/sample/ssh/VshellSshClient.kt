@@ -1,6 +1,5 @@
 package com.srilakshmikanthanp.vshell.sample.ssh
 
-import com.srilakshmikanthanp.vshell.parser.VshellSyntaxException
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderMapRegistry
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.evaluator.VshellEvaluator
@@ -8,11 +7,8 @@ import com.srilakshmikanthanp.vshell.jvm.event.Event
 import com.srilakshmikanthanp.vshell.jvm.event.SimpleEventSource
 import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorCommandNotFoundException
 import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorException
-import com.srilakshmikanthanp.vshell.sample.commands.CatCommandBuilder
-import com.srilakshmikanthanp.vshell.sample.commands.CdCommandBuilder
-import com.srilakshmikanthanp.vshell.sample.commands.EchoCommandBuilder
-import com.srilakshmikanthanp.vshell.sample.commands.ExitCommandBuilder
-import com.srilakshmikanthanp.vshell.sample.commands.LsCommandBuilder
+import com.srilakshmikanthanp.vshell.parser.VshellSyntaxException
+import com.srilakshmikanthanp.vshell.sample.commands.*
 import org.jline.builtins.ssh.Ssh.ShellParams
 import org.jline.reader.EndOfFileException
 import org.jline.reader.LineReaderBuilder
@@ -41,11 +37,11 @@ class VshellSshClient(private val params: ShellParams): Runnable {
     }
 
     listOf(
-      CatCommandBuilder(),
-      LsCommandBuilder(),
-      CdCommandBuilder(),
-      EchoCommandBuilder(),
-      ExitCommandBuilder(),
+      EchoCommand.EchoCommandBuilder(),
+      CatCommand.CatCommandBuilder(),
+      CdCommand.CdCommandBuilder(),
+      LsCommand.LsCommandBuilder(),
+      ExitCommand.ExitCommandBuilder(),
     ).forEach {
       commandBuilderRegistry.register(it)
     }

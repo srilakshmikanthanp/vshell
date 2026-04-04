@@ -1,6 +1,8 @@
 package com.srilakshmikanthanp.vshell.sample.commands
 
 import com.srilakshmikanthanp.vshell.jvm.command.Command
+import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilder
+import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderDescriptor
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import java.io.IOException
 import java.io.InputStream
@@ -10,11 +12,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.exists
 
 class CatCommand(private val context: Context, private val args: List<String>): Command {
-  override fun execute(
-    stdIn: InputStream,
-    stdOut: OutputStream,
-    stdErr: OutputStream
-  ): Int {
+  override fun execute(stdIn: InputStream, stdOut: OutputStream, stdErr: OutputStream): Int {
     try {
       args.stream().map { context.getCurrentWorkingDirectory().resolve(Path(it.trim())) }.forEach {
         stdOut.write(if (it.exists()) Files.readAllBytes(it) else "cat: ${it.fileName}: No such file\n".toByteArray())
@@ -22,6 +20,16 @@ class CatCommand(private val context: Context, private val args: List<String>): 
       return 0
     } catch (e: IOException) {
       return -1
+    }
+  }
+
+  @CommandBuilderDescriptor(command = "cat")
+  class CatCommandBuilder: CommandBuilder {
+    override fun build(
+      context: Context,
+      args: List<String>
+    ): Command {
+      return CatCommand(context, args)
     }
   }
 }

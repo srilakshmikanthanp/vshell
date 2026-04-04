@@ -1,6 +1,8 @@
 package com.srilakshmikanthanp.vshell.sample.commands
 
 import com.srilakshmikanthanp.vshell.jvm.command.Command
+import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilder
+import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderDescriptor
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.event.Event
 import java.io.InputStream
@@ -27,6 +29,16 @@ class LsCommand(private val context: Context, private val args: List<String>) : 
         process.waitFor()
         return process.exitValue()
       }
+    }
+  }
+
+  @CommandBuilderDescriptor("ls", ["dir"])
+  class LsCommandBuilder: CommandBuilder {
+    override fun build(
+      context: Context,
+      args: List<String>
+    ): Command {
+      return LsCommand(context, args)
     }
   }
 }

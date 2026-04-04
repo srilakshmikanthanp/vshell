@@ -1,17 +1,15 @@
 package com.srilakshmikanthanp.vshell.sample.commands
 
 import com.srilakshmikanthanp.vshell.jvm.command.Command
+import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilder
+import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderDescriptor
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import java.io.InputStream
 import java.io.OutputStream
 import java.io.PrintWriter
 
 class CdCommand(private val context: Context, private val args: List<String>) : Command {
-  override fun execute(
-    stdIn: InputStream,
-    stdOut: OutputStream,
-    stdErr: OutputStream
-  ): Int {
+  override fun execute(stdIn: InputStream, stdOut: OutputStream, stdErr: OutputStream): Int {
     PrintWriter(stdErr).use { err ->
       if (args.size != 1) {
         err.println("cd: expected exactly one argument")
@@ -27,6 +25,16 @@ class CdCommand(private val context: Context, private val args: List<String>) : 
 
       context.setCurrentWorkingDirectory(path)
       return 0
+    }
+  }
+
+  @CommandBuilderDescriptor("cd")
+  class CdCommandBuilder: CommandBuilder {
+    override fun build(
+      context: Context,
+      args: List<String>
+    ): Command {
+      return CdCommand(context, args)
     }
   }
 }
