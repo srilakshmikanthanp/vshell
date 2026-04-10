@@ -15,7 +15,7 @@ class LsCommand(private val context: Context, private val args: List<String>) : 
         .directory(context.getCurrentWorkingDirectory().toFile())
         .start()
 
-    context.getEventSource().subscribe {
+    context.eventSource.subscribe {
       when (it) {
         Event.TERMINATE_EVENT -> process.destroyForcibly()
         Event.INTERRUPT_EVENT -> process.destroy()
