@@ -1,12 +1,14 @@
 package com.srilakshmikanthanp.vshell.jvm.context
 
+import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderRegistry
 import com.srilakshmikanthanp.vshell.jvm.event.EventSource
 import java.nio.file.Path
 
 class Context(
-  private val homeDirectory: Path,
-  private val eventSource: EventSource,
-  private val parentContext: Context? = null
+  val homeDirectory: Path,
+  val commandBuilderRegistry: CommandBuilderRegistry,
+  val eventSource: EventSource,
+  val parentContext: Context? = null
 ) {
   private val environmentVariables: MutableMap<String, String> = mutableMapOf()
   private val localVariables: MutableMap<String, String> = mutableMapOf()
@@ -56,20 +58,8 @@ class Context(
     this.currentWorkingDirectory = path
   }
 
-  fun getHomeDirectory(): Path {
-    return this.homeDirectory
-  }
-
   fun findVariable(name: String): String? {
     return this.localVariables[name] ?: this.parentContext?.findVariable(name)
-  }
-
-  fun getParentContext(): Context? {
-    return this.parentContext
-  }
-
-  fun getEventSource(): EventSource {
-    return this.eventSource
   }
 
   fun findReference(name: String): String? {
