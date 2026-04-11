@@ -65,4 +65,15 @@ class Context(
   fun findReference(name: String): String? {
     return this.findVariable(name) ?: this.findEnvironmentVariable(name)
   }
+
+  companion object {
+    public fun withParentContext(parentContext: Context): Context {
+      return Context(
+        homeDirectory = parentContext.homeDirectory,
+        commandBuilderRegistry = parentContext.commandBuilderRegistry,
+        eventSource = parentContext.eventSource,
+        parentContext = parentContext
+      )
+    }
+  }
 }

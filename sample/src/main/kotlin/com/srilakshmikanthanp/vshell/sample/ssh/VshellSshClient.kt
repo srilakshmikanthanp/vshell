@@ -5,16 +5,17 @@ import com.srilakshmikanthanp.vshell.jvm.command.builtins.ExitCommand
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.event.Event
 import com.srilakshmikanthanp.vshell.jvm.event.SimpleEventSource
-import com.srilakshmikanthanp.vshell.jvm.runtime.VshellRuntime
 import com.srilakshmikanthanp.vshell.sample.commands.*
 import org.jline.builtins.ssh.Ssh.ShellParams
 import org.jline.reader.LineReaderBuilder
 import org.jline.terminal.Terminal.Signal
+import java.net.InetSocketAddress
 import java.nio.file.Path
 
 class VshellSshClient(private val params: ShellParams): Runnable {
   private val context = Context(Path.of("/home/${params.session.username}"), CommandBuilderMapRegistry(), SimpleEventSource())
-  private val runtime = VshellRuntime(context, VshellSshClientReader(params), params.terminal.input(), params.terminal.output(), params.terminal.output())
+  private val reader = LineReaderBuilder.builder().terminal(params.terminal).build()
+  private val hostname = (params.session.localAddress as? InetSocketAddress)?.hostString ?: params.session.localAddress.toString()
 
   init {
     params.terminal.handle(Signal.QUIT) {
@@ -30,13 +31,14 @@ class VshellSshClient(private val params: ShellParams): Runnable {
     }
 
     listOf(
+      VshellCommand.VshellCommandBuilder(reader, hostname, params.session.username),
       EchoCommand.EchoCommandBuilder(),
       CatCommand.CatCommandBuilder(),
       CdCommand.CdCommandBuilder(),
       LsCommand.LsCommandBuilder(),
       ExitCommand.ExitCommandBuilder(),
       ExportCommand.ExportCommandBuilder(),
-      SetCommand.SetCommandBuilder()
+      SetCommand.SetCommandBuilder(),
     ).forEach {
       context.commandBuilderRegistry.register(it)
     }
@@ -44,7 +46,11 @@ class VshellSshClient(private val params: ShellParams): Runnable {
 
   override fun run() {
     try {
-      this.runtime.run()
+      val command = VshellCommand(reader, hostname, params.session.username, context, listOf())
+      val stdOut = params.terminal.output()
+      val stdIn = params.terminal.input()
+      val stdErr = params.terminal.output()
+      command.execute(stdIn, stdOut, stdErr)
     } finally {
       params.session.close()
     }

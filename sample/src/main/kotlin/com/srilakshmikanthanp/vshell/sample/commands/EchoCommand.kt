@@ -3,16 +3,14 @@ package com.srilakshmikanthanp.vshell.sample.commands
 import com.srilakshmikanthanp.vshell.jvm.command.Command
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilder
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderDescriptor
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.Input
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.Output
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.TextCapableCommand
 import com.srilakshmikanthanp.vshell.jvm.context.Context
-import java.io.InputStream
-import java.io.OutputStream
-import java.io.PrintWriter
 
-class EchoCommand(private val context: Context, private val args: List<String>) : Command {
-  override fun execute(stdIn: InputStream, stdOut: OutputStream, stdErr: OutputStream): Int {
-    PrintWriter(stdOut).use { out ->
-      out.println(args.joinToString(" "))
-    }
+class EchoCommand(private val context: Context, private val args: List<String>) : TextCapableCommand {
+  override fun execute(stdIn: Input, stdOut: Output, stdErr: Output): Int {
+    stdOut.writer.println(args.joinToString(" "))
     return 0
   }
 
