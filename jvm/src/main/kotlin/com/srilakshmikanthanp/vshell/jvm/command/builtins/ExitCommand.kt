@@ -12,7 +12,7 @@ class ExitCommand(private val context: Context, private val args: List<String>) 
       0 -> 0
       else -> throw CommandException(1, "exit: too many arguments")
     }
-    throw ExitException(exitCode, "exit")
+    throw ExitException(exitCode, "Bye!")
   }
 
   @CommandBuilderDescriptor("exit", aliases = ["quit"])
