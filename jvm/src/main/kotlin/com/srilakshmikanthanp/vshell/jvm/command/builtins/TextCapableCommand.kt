@@ -1,6 +1,7 @@
 package com.srilakshmikanthanp.vshell.jvm.command.builtins
 
 import com.srilakshmikanthanp.vshell.jvm.command.Command
+import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.OutputStream
@@ -18,7 +19,7 @@ interface TextCapableCommand: Command {
     stdOut: OutputStream,
     stdErr: OutputStream
   ): Int {
-    InputStreamReader(stdIn).use { stdInReader ->
+    BufferedReader(InputStreamReader(stdIn)).use { stdInReader ->
       PrintWriter(stdOut).use { stdOutWriter ->
         PrintWriter(stdErr).use { stdErrWriter ->
           return try {
