@@ -10,44 +10,36 @@ Instead of exposing a real OS shell, `vshell` lets you define exactly:
 > Think of it as a **virtual shell runtime embedded inside your application**.
 > In vshell, a command is simply **application logic exposed through a shell interface**.
 
-## 📦 Modules
+## Modules
 
 * **core** → vshell grammar
 * **parser** → parsing & AST
-* **jvm** → JVM runtime implementation
+* **jvm** → Vshell on top of JVM implementation
 * **sample** → SSH server demo with basic commands
 
 ---
 
-## ▶️ Running the Sample
+## Running the Sample
 
-The sample module exposes a controlled SSH shell:
-
-* Runs on `127.0.0.1:2222`
-* Username/password authentication
-* Only registered commands are available
-
-See [commands](sample/src/main/kotlin/com/srilakshmikanthanp/vshell/sample/commands) for an example command implementation.
+The sample module exposes a controlled SSH shell on `127.0.0.1:2222`
 
 ```bash
+git clone https://github.com/srilakshmikanthanp/vshell.git
+cd vshell
 ./gradlew --no-daemon :sample:run
 ```
 
-Then connect:
+Then connect to the SSH server using with default password `password`:
 
 ```bash
 ssh -p 2222 "$(whoami)@127.0.0.1"
 ```
 
-Default password:
-
-```
-password
-```
+To understand about commands implementation, See some of the [commands](sample/src/main/kotlin/com/srilakshmikanthanp/vshell/sample/commands).
 
 ---
 
-## 💻 Example Session
+## Example Session
 
 ```text
 user@127.0.0.1:/home/user> ls
@@ -61,15 +53,3 @@ Note: quotes are required for arguments.
 user@127.0.0.1:/home/user> exit
 Exit: Bye!
 ```
-
----
-
-## 🎯 When to Use vshell
-
-Use `vshell` when you need:
-
-* controlled SSH access
-* safe production debugging
-* restricted environments
-
----
