@@ -3,7 +3,7 @@ package com.srilakshmikanthanp.vshell.sample.commands
 import com.srilakshmikanthanp.vshell.jvm.command.Command
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilder
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderDescriptor
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.TextCapableCommand
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.TextableCommand
 import com.srilakshmikanthanp.vshell.jvm.command.builtins.exception.CommandException
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.io.Input
@@ -13,7 +13,7 @@ import kotlin.io.path.Path
 import kotlin.io.path.exists
 import kotlin.io.path.isRegularFile
 
-class CatCommand(private val context: Context, private val args: List<String>): TextCapableCommand {
+class CatCommand(private val context: Context, private val args: List<String>): TextableCommand {
   override fun execute(
     stdIn: Input,
     stdOut: Output,

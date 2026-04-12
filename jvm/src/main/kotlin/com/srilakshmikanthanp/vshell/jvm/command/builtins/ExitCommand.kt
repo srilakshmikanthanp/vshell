@@ -9,7 +9,7 @@ import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.io.Input
 import com.srilakshmikanthanp.vshell.jvm.io.Output
 
-class ExitCommand(private val context: Context, private val args: List<String>) : TextCapableCommand {
+class ExitCommand(private val context: Context, private val args: List<String>) : TextableCommand {
   override fun execute(stdIn: Input, stdOut: Output, stdErr: Output): Int {
     val exitCode = when(args.size) {
       1 -> args[0].toIntOrNull() ?: throw CommandException(-1, "exit: ${args[0]}: numeric argument required")

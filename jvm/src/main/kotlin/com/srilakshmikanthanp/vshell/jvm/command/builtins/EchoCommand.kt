@@ -7,7 +7,7 @@ import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.io.Input
 import com.srilakshmikanthanp.vshell.jvm.io.Output
 
-class EchoCommand(private val context: Context, private val args: List<String>) : TextCapableCommand {
+class EchoCommand(private val context: Context, private val args: List<String>) : TextableCommand {
   override fun execute(stdIn: Input, stdOut: Output, stdErr: Output): Int {
     stdOut.writer.println(args.joinToString(" "))
     return 0
