@@ -10,7 +10,6 @@ import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.event.Event
 import com.srilakshmikanthanp.vshell.jvm.event.SimpleEventSource
 import com.srilakshmikanthanp.vshell.sample.commands.*
-import com.srilakshmikanthanp.vshell.sample.reader.VshellSshReader
 import org.jline.builtins.ssh.Ssh.ShellParams
 import org.jline.reader.LineReaderBuilder
 import org.jline.terminal.Terminal.Signal
@@ -20,7 +19,7 @@ import java.nio.file.Path
 class VshellSshClient(private val params: ShellParams): Runnable {
   private val context = Context(Path.of("/home/${params.session.username}"), CommandBuilderMapRegistry(), SimpleEventSource())
   private val hostname = (params.session.localAddress as? InetSocketAddress)?.hostString ?: params.session.localAddress.toString()
-  private val reader = VshellSshReader(params.session.username, hostname, LineReaderBuilder.builder().terminal(params.terminal).build())
+  private val reader = VshellSshClientReader(params.session.username, hostname, LineReaderBuilder.builder().terminal(params.terminal).build())
 
   init {
     params.terminal.handle(Signal.QUIT) {

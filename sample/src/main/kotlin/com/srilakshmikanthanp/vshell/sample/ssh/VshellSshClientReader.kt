@@ -1,4 +1,4 @@
-package com.srilakshmikanthanp.vshell.sample.reader
+package com.srilakshmikanthanp.vshell.sample.ssh
 
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.shell.VshellEndOfFileException
@@ -8,7 +8,8 @@ import org.jline.reader.EndOfFileException
 import org.jline.reader.LineReader
 import org.jline.reader.UserInterruptException
 
-class VshellSshReader(private val username: String, private val hostname: String, private val reader: LineReader): VshellReader {
+class VshellSshClientReader(private val username: String, private val hostname: String, private val reader: LineReader):
+  VshellReader {
   override fun read(context: Context): String {
     try {
       return reader.readLine("$$username@$hostname:${context.getCurrentWorkingDirectory()}> ")
