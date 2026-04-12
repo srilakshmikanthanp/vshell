@@ -8,6 +8,7 @@ import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorCommandNotFoundExcepti
 import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorException
 import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorVisitor
 import com.srilakshmikanthanp.vshell.jvm.executor.substitution.StdOutSubstitutor
+import com.srilakshmikanthanp.vshell.jvm.io.CommandInputStream
 import com.srilakshmikanthanp.vshell.parser.VshellAntlrParser
 import com.srilakshmikanthanp.vshell.parser.VshellParser
 import com.srilakshmikanthanp.vshell.parser.VshellSyntaxException
@@ -33,7 +34,7 @@ class VshellRepl(
   private fun execute(command: Command) {
     val commandStdOut = CloseShieldOutputStream.wrap(stdOut)
     val commandStdErr = CloseShieldOutputStream.wrap(stdErr)
-    val commandStdIn = CloseShieldInputStream.wrap(stdIn)
+    val commandStdIn = CommandInputStream.wrap(stdIn)
     command.execute(commandStdIn, commandStdOut, commandStdErr)
   }
 
