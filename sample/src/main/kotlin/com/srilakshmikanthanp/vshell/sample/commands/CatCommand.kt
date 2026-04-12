@@ -14,11 +14,16 @@ import kotlin.io.path.exists
 import kotlin.io.path.isRegularFile
 
 class CatCommand(private val context: Context, private val args: List<String>): TextableCommand {
-  override fun execute(
-    stdIn: Input,
-    stdOut: Output,
-    stdErr: Output
-  ): Int {
+  override fun execute(stdIn: Input, stdOut: Output, stdErr: Output): Int {
+    if (!args.isEmpty()) {
+      files(stdIn, stdOut, stdErr)
+    } else {
+      stdIn(stdIn, stdOut, stdErr)
+    }
+    return 0
+  }
+
+  private fun files(stdIn: Input, stdOut: Output, stdErr: Output) {
     args.stream().map { context.getCurrentWorkingDirectory().resolve(Path(it.trim())) }.forEach {
       if (!it.exists()) {
         throw CommandException(1, "cat: ${it.fileName}: No such file or directory")
@@ -28,7 +33,13 @@ class CatCommand(private val context: Context, private val args: List<String>): 
         stdOut.output.write(Files.readAllBytes(it))
       }
     }
-    return 0
+  }
+
+  private fun stdIn(stdIn: Input, stdOut: Output, stdErr: Output) {
+    generateSequence { stdIn.reader.readLine() }.forEach {
+      stdOut.writer.println(it)
+      stdOut.writer.flush()
+    }
   }
 
   @CommandBuilderDescriptor(command = "cat")
