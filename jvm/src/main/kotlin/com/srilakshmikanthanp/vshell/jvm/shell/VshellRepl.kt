@@ -7,7 +7,6 @@ import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorCommandNotFoundExcepti
 import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorException
 import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorVisitor
 import com.srilakshmikanthanp.vshell.jvm.executor.substitution.StdOutSubstitutor
-import com.srilakshmikanthanp.vshell.jvm.io.println
 import com.srilakshmikanthanp.vshell.parser.VshellAntlrParser
 import com.srilakshmikanthanp.vshell.parser.VshellParser
 import com.srilakshmikanthanp.vshell.parser.VshellSyntaxException
@@ -25,6 +24,10 @@ class VshellRepl(
 ): Runnable {
   private val executorVisitor = ExecutorVisitor(context, StdOutSubstitutor())
   private val parser : VshellParser = VshellAntlrParser()
+
+  private fun OutputStream.println(message: String) {
+    this.write("$message\n".toByteArray())
+  }
 
   private fun evaluate(input: String) {
     val commandStdOut = CloseShieldOutputStream.wrap(stdOut)
