@@ -30,6 +30,13 @@ class VshellSshClient(private val params: ShellParams): Runnable {
       context.eventSource.dispatch(Event.INTERRUPT_EVENT)
     }
 
+    mapOf(
+      "USERNAME" to params.session.username,
+      "HOSTNAME" to hostname,
+    ).forEach { (key, value) ->
+      context.setEnvironmentVariable(key, value)
+    }
+
     params.env.forEach { (key, value) ->
       context.setEnvironmentVariable(key, value)
     }
