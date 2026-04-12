@@ -1,11 +1,16 @@
 package com.srilakshmikanthanp.vshell.sample.ssh
 
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderMapRegistry
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.EchoCommand
 import com.srilakshmikanthanp.vshell.jvm.command.builtins.ExitCommand
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.ExportCommand
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.SetCommand
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.VshellCommand
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.event.Event
 import com.srilakshmikanthanp.vshell.jvm.event.SimpleEventSource
 import com.srilakshmikanthanp.vshell.sample.commands.*
+import com.srilakshmikanthanp.vshell.sample.reader.VshellSshReader
 import org.jline.builtins.ssh.Ssh.ShellParams
 import org.jline.reader.LineReaderBuilder
 import org.jline.terminal.Terminal.Signal
@@ -14,8 +19,8 @@ import java.nio.file.Path
 
 class VshellSshClient(private val params: ShellParams): Runnable {
   private val context = Context(Path.of("/home/${params.session.username}"), CommandBuilderMapRegistry(), SimpleEventSource())
-  private val reader = LineReaderBuilder.builder().terminal(params.terminal).build()
   private val hostname = (params.session.localAddress as? InetSocketAddress)?.hostString ?: params.session.localAddress.toString()
+  private val reader = VshellSshReader(params.session.username, hostname, LineReaderBuilder.builder().terminal(params.terminal).build())
 
   init {
     params.terminal.handle(Signal.QUIT) {
@@ -31,7 +36,7 @@ class VshellSshClient(private val params: ShellParams): Runnable {
     }
 
     listOf(
-      VshellCommand.VshellCommandBuilder(reader, hostname, params.session.username),
+      VshellCommand.VshellCommandBuilder(reader),
       EchoCommand.EchoCommandBuilder(),
       CatCommand.CatCommandBuilder(),
       CdCommand.CdCommandBuilder(),
@@ -46,7 +51,7 @@ class VshellSshClient(private val params: ShellParams): Runnable {
 
   override fun run() {
     try {
-      val command = VshellCommand(reader, hostname, params.session.username, context, listOf())
+      val command = VshellCommand(reader, context, listOf())
       val stdOut = params.terminal.output()
       val stdIn = params.terminal.input()
       val stdErr = params.terminal.output()

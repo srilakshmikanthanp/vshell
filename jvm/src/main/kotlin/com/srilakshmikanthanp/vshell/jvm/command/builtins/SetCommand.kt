@@ -1,11 +1,11 @@
-package com.srilakshmikanthanp.vshell.sample.commands
+package com.srilakshmikanthanp.vshell.jvm.command.builtins
 
 import com.srilakshmikanthanp.vshell.jvm.command.Command
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilder
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderDescriptor
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 
-class SetCommand(context: Context, args: List<String>) : VarCommand(context, args) {
+class SetCommand(context: Context, args: List<String>) : VariableCommand(context, args) {
   override fun setVariable(name: String, value: String) {
     context.setVariable(name, value)
   }
@@ -14,7 +14,7 @@ class SetCommand(context: Context, args: List<String>) : VarCommand(context, arg
     return context.getAllVariables()
   }
 
-  @CommandBuilderDescriptor("set")
+  @CommandBuilderDescriptor("set", aliases = ["SET"])
   class SetCommandBuilder : CommandBuilder {
     override fun build(
       context: Context,

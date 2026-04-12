@@ -1,11 +1,8 @@
-package com.srilakshmikanthanp.vshell.sample.commands
+package com.srilakshmikanthanp.vshell.jvm.command.builtins
 
 import com.srilakshmikanthanp.vshell.jvm.command.Command
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilder
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderDescriptor
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.Input
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.Output
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.TextCapableCommand
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 
 class EchoCommand(private val context: Context, private val args: List<String>) : TextCapableCommand {
