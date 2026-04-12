@@ -8,11 +8,10 @@ import org.jline.reader.EndOfFileException
 import org.jline.reader.LineReader
 import org.jline.reader.UserInterruptException
 
-class VshellSshClientReader(private val username: String, private val hostname: String, private val reader: LineReader):
-  VshellReader {
+class VshellSshClientReader(private val username: String, private val hostname: String, private val reader: LineReader): VshellReader {
   override fun read(context: Context): String {
     try {
-      return reader.readLine("$$username@$hostname:${context.getCurrentWorkingDirectory()}> ")
+      return reader.readLine("$username@$hostname:${context.getCurrentWorkingDirectory()}> ")
     } catch (e: EndOfFileException) {
       throw VshellEndOfFileException(e.partialLine, "EOF", e)
     } catch (e: UserInterruptException) {
