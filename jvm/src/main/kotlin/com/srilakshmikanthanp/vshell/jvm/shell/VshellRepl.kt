@@ -1,6 +1,6 @@
 package com.srilakshmikanthanp.vshell.jvm.shell
 
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.ExitException
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.exception.ExitException
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.executor.CommandsShellNode
 import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorCommandNotFoundException

@@ -1,6 +1,9 @@
 package com.srilakshmikanthanp.vshell.jvm.command.builtins
 
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.exception.CommandException
 import com.srilakshmikanthanp.vshell.jvm.context.Context
+import com.srilakshmikanthanp.vshell.jvm.io.Input
+import com.srilakshmikanthanp.vshell.jvm.io.Output
 
 abstract class VariableCommand(protected val context: Context, protected val args: List<String>) : TextCapableCommand {
   override fun execute(stdIn: Input, stdOut: Output, stdErr: Output): Int {
