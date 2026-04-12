@@ -14,7 +14,7 @@ Instead of exposing a real OS shell, `vshell` lets you define exactly:
 
 * **core** → vshell grammar
 * **parser** → parsing & AST
-* **jvm** → evaluator
+* **jvm** → JVM runtime implementation
 * **sample** → SSH server demo with basic commands
 
 ---
