@@ -34,7 +34,7 @@ class VshellRepl(
   private fun execute(command: Command) {
     val commandStdOut = CloseShieldOutputStream.wrap(stdOut)
     val commandStdErr = CloseShieldOutputStream.wrap(stdErr)
-    val commandStdIn = CommandInputStream.wrap(stdIn)
+    val commandStdIn = CommandInputStream.wrap(CloseShieldInputStream.wrap(stdIn))
     command.execute(commandStdIn, commandStdOut, commandStdErr)
   }
 
