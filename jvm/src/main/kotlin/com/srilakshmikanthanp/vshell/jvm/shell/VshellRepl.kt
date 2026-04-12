@@ -1,5 +1,6 @@
 package com.srilakshmikanthanp.vshell.jvm.shell
 
+import com.srilakshmikanthanp.vshell.jvm.command.Command
 import com.srilakshmikanthanp.vshell.jvm.command.builtins.exception.ExitException
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.executor.CommandsShellNode
@@ -29,13 +30,17 @@ class VshellRepl(
     this.write("$message\n".toByteArray())
   }
 
-  private fun evaluate(input: String) {
+  private fun execute(command: Command) {
     val commandStdOut = CloseShieldOutputStream.wrap(stdOut)
-    val commandStdIn = CloseShieldInputStream.wrap(stdIn)
     val commandStdErr = CloseShieldOutputStream.wrap(stdErr)
+    val commandStdIn = CloseShieldInputStream.wrap(stdIn)
+    command.execute(commandStdIn, commandStdOut, commandStdErr)
+  }
+
+  private fun evaluate(input: String) {
     val tree = parser.parse(input)
     val node = tree.accept(executorVisitor) as? CommandsShellNode ?: throw VshellSyntaxException("$input is not a command")
-    node.commands.forEach { it.execute(commandStdIn, commandStdOut, commandStdErr) }
+    node.commands.forEach(this::execute)
   }
 
   override fun run() {
