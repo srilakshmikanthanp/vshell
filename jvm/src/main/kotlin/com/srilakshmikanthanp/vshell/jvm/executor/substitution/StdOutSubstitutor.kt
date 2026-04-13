@@ -9,6 +9,6 @@ class StdOutSubstitutor : CommandSubstitutor {
   override fun substitute(command: Command): String {
     val stdOut = ByteArrayOutputStream()
     command.execute(InputStream.nullInputStream(), stdOut, OutputStream.nullOutputStream())
-    return stdOut.toString()
+    return stdOut.toString().trim()
   }
 }
