@@ -48,7 +48,7 @@ class CommandInputStream private constructor(private val stream: InputStream) : 
   }
 
   override fun close() {
-    super.close()
+    stream.close()
   }
 
   override fun mark(readlimit: Int) {
