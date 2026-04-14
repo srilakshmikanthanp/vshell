@@ -3,7 +3,7 @@ package com.srilakshmikanthanp.vshell.jvm.event
 import java.util.concurrent.ConcurrentLinkedDeque
 import java.util.concurrent.CopyOnWriteArrayList
 
-class SimpleEventBus : EventSource, EventDispatcher, EventScope {
+class SimpleEventBus : EventBus {
   private val scopes = ConcurrentLinkedDeque<CopyOnWriteArrayList<EventHandler>>()
   private val scope get() = scopes.peekLast() ?: throw IllegalStateException("Empty Scope")
 
