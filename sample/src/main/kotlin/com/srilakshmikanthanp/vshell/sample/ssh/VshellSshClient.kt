@@ -8,7 +8,7 @@ import com.srilakshmikanthanp.vshell.jvm.command.builtins.SetCommand
 import com.srilakshmikanthanp.vshell.jvm.command.builtins.VshellCommand
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.event.Event
-import com.srilakshmikanthanp.vshell.jvm.event.SimpleEventSource
+import com.srilakshmikanthanp.vshell.jvm.event.SimpleEventBus
 import com.srilakshmikanthanp.vshell.sample.commands.*
 import org.jline.builtins.ssh.Ssh.ShellParams
 import org.jline.reader.LineReaderBuilder
@@ -17,17 +17,19 @@ import java.net.InetSocketAddress
 import java.nio.file.Path
 
 class VshellSshClient(private val params: ShellParams): Runnable {
-  private val context = Context(Path.of("/home/${params.session.username}"), CommandBuilderMapRegistry(), SimpleEventSource())
+  private val context = Context(Path.of("/home/${params.session.username}"))
+  private val commandBuilderRegistry =  CommandBuilderMapRegistry()
+  private val eventBus =  SimpleEventBus()
   private val hostname = (params.session.localAddress as? InetSocketAddress)?.hostString ?: params.session.localAddress.toString()
   private val reader = VshellSshClientReader(params.session.username, hostname, LineReaderBuilder.builder().terminal(params.terminal).build())
 
   init {
     params.terminal.handle(Signal.QUIT) {
-      context.eventSource.dispatch(Event.TERMINATE_EVENT)
+      eventBus.dispatch(Event.TERMINATE_EVENT)
     }
 
     params.terminal.handle(Signal.INT) {
-      context.eventSource.dispatch(Event.INTERRUPT_EVENT)
+      eventBus.dispatch(Event.INTERRUPT_EVENT)
     }
 
     mapOf(
@@ -42,7 +44,7 @@ class VshellSshClient(private val params: ShellParams): Runnable {
     }
 
     listOf(
-      VshellCommand.VshellCommandBuilder(reader),
+      VshellCommand.VshellCommandBuilder(commandBuilderRegistry, reader, eventBus),
       EchoCommand.EchoCommandBuilder(),
       CatCommand.CatCommandBuilder(),
       CdCommand.CdCommandBuilder(),
@@ -51,13 +53,13 @@ class VshellSshClient(private val params: ShellParams): Runnable {
       ExportCommand.ExportCommandBuilder(),
       SetCommand.SetCommandBuilder(),
     ).forEach {
-      context.commandBuilderRegistry.register(it)
+      commandBuilderRegistry.register(it)
     }
   }
 
   override fun run() {
     try {
-      val command = VshellCommand(reader, context, listOf())
+      val command = VshellCommand(commandBuilderRegistry, reader, context, eventBus, listOf())
       val stdOut = params.terminal.output()
       val stdIn = params.terminal.input()
       val stdErr = params.terminal.output()

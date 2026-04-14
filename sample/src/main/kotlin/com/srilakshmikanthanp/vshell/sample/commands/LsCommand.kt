@@ -3,13 +3,13 @@ package com.srilakshmikanthanp.vshell.sample.commands
 import com.srilakshmikanthanp.vshell.jvm.command.Command
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilder
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderDescriptor
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.TextableCommand
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.AbstractTextCapableCommand
 import com.srilakshmikanthanp.vshell.jvm.command.builtins.exception.CommandException
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.io.Input
 import com.srilakshmikanthanp.vshell.jvm.io.Output
 
-class LsCommand(private val context: Context, private val args: List<String>) : TextableCommand {
+class LsCommand(private val context: Context, private val args: List<String>) : AbstractTextCapableCommand {
   override fun execute(stdIn: Input, stdOut: Output, stdErr: Output): Int {
     val path = if (args.isEmpty()) {
       context.getCurrentWorkingDirectory()

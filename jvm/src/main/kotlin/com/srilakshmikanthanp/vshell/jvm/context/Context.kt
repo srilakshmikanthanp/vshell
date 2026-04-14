@@ -1,13 +1,9 @@
 package com.srilakshmikanthanp.vshell.jvm.context
 
-import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderRegistry
-import com.srilakshmikanthanp.vshell.jvm.event.EventSource
 import java.nio.file.Path
 
 class Context(
   val homeDirectory: Path,
-  val commandBuilderRegistry: CommandBuilderRegistry,
-  val eventSource: EventSource,
   val parentContext: Context? = null
 ) {
   private val environmentVariables: MutableMap<String, String> = mutableMapOf()
@@ -67,13 +63,8 @@ class Context(
   }
 
   companion object {
-    public fun withParentContext(parentContext: Context): Context {
-      return Context(
-        homeDirectory = parentContext.homeDirectory,
-        commandBuilderRegistry = parentContext.commandBuilderRegistry,
-        eventSource = parentContext.eventSource,
-        parentContext = parentContext
-      )
+    fun withParentContext(parentContext: Context): Context {
+      return Context(homeDirectory = parentContext.homeDirectory, parentContext = parentContext)
     }
   }
 }

@@ -5,7 +5,7 @@ import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.io.Input
 import com.srilakshmikanthanp.vshell.jvm.io.Output
 
-abstract class VariableCommand(protected val context: Context, protected val args: List<String>) : TextableCommand {
+abstract class VariableCommand(protected val context: Context, protected val args: List<String>) : AbstractTextCapableCommand {
   override fun execute(stdIn: Input, stdOut: Output, stdErr: Output): Int {
     if (args.isEmpty()) {
       getVariables().forEach { (key, value) -> stdOut.writer.println("$key=$value") }

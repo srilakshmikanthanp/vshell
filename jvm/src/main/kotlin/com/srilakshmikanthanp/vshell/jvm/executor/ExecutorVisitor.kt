@@ -10,6 +10,7 @@ import com.srilakshmikanthanp.vshell.jvm.executor.substitution.CommandSubstituto
 
 class ExecutorVisitor(
   private val context: Context,
+  private val commandBuilderRegistry: CommandBuilderRegistry,
   private val commandSubstitutor: CommandSubstitutor
 ): NodeVisitor<ExecutionShellNode> {
   override fun visitCommandSubstitution(node: CommandSubstitutionNode): ExecutionShellNode {
@@ -18,7 +19,7 @@ class ExecutorVisitor(
   }
 
   override fun visitLeafCommand(node: LeafCommandNode): ExecutionShellNode {
-    val commandBuilder = context.commandBuilderRegistry.get(node.identifierNode.name) ?: throw ExecutorCommandNotFoundException(node.identifierNode.name)
+    val commandBuilder = commandBuilderRegistry.get(node.identifierNode.name) ?: throw ExecutorCommandNotFoundException(node.identifierNode.name)
     val arguments = node.arguments.map { it.accept(this).asExpressionShellNode().asLiteralShellNode().asStringLiteralShellNode() }
     return CommandShellNode(commandBuilder.build(context, arguments.map { it.value }))
   }

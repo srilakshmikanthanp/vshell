@@ -10,18 +10,8 @@ import java.io.InputStreamReader
 import java.io.OutputStream
 import java.io.PrintWriter
 
-interface TextableCommand: Command {
-  public abstract fun execute(
-    stdIn: Input,
-    stdOut: Output,
-    stdErr: Output
-  ): Int
-
-  public override fun execute(
-    stdIn: InputStream,
-    stdOut: OutputStream,
-    stdErr: OutputStream
-  ): Int {
+interface AbstractTextCapableCommand: Command {
+  public override fun execute(stdIn: InputStream, stdOut: OutputStream, stdErr: OutputStream): Int {
     BufferedReader(InputStreamReader(stdIn)).use { stdInReader ->
       PrintWriter(stdOut).use { stdOutWriter ->
         PrintWriter(stdErr).use { stdErrWriter ->
@@ -39,4 +29,6 @@ interface TextableCommand: Command {
       }
     }
   }
+
+  public abstract fun execute(stdIn: Input, stdOut: Output, stdErr: Output): Int
 }

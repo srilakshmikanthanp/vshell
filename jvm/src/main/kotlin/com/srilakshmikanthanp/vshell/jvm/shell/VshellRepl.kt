@@ -1,6 +1,7 @@
 package com.srilakshmikanthanp.vshell.jvm.shell
 
 import com.srilakshmikanthanp.vshell.jvm.command.Command
+import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderRegistry
 import com.srilakshmikanthanp.vshell.jvm.command.builtins.exception.ExitException
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.executor.CommandsShellNode
@@ -18,13 +19,14 @@ import java.io.InputStream
 import java.io.OutputStream
 
 class VshellRepl(
+  val commandBuilderRegistry: CommandBuilderRegistry,
   val reader: VshellReader,
   val context: Context,
   val stdIn: InputStream,
   val stdOut: OutputStream,
   val stdErr: OutputStream
 ): Runnable {
-  private val executorVisitor = ExecutorVisitor(context, StdOutSubstitutor())
+  private val executorVisitor = ExecutorVisitor(context, commandBuilderRegistry, StdOutSubstitutor())
   private val parser : VshellParser = VshellAntlrParser()
 
   private fun OutputStream.println(message: String) {
