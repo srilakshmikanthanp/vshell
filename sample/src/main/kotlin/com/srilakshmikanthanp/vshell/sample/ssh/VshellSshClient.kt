@@ -1,11 +1,7 @@
 package com.srilakshmikanthanp.vshell.sample.ssh
 
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderMapRegistry
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.EchoCommand
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.ExitCommand
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.ExportCommand
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.SetCommand
-import com.srilakshmikanthanp.vshell.jvm.command.builtins.VshellCommand
+import com.srilakshmikanthanp.vshell.jvm.command.builtins.*
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.event.Event
 import com.srilakshmikanthanp.vshell.jvm.event.SimpleEventBus
@@ -17,8 +13,8 @@ import java.net.InetSocketAddress
 import java.nio.file.Path
 
 class VshellSshClient(private val params: ShellParams): Runnable {
-  private val context = Context(Path.of("/home/${params.session.username}"))
   private val commandBuilderRegistry =  CommandBuilderMapRegistry()
+  private val context = Context(Path.of("/home/${params.session.username}"))
   private val eventBus =  SimpleEventBus()
   private val hostname = (params.session.localAddress as? InetSocketAddress)?.hostString ?: params.session.localAddress.toString()
   private val reader = VshellSshClientReader(params.session.username, hostname, LineReaderBuilder.builder().terminal(params.terminal).build())
