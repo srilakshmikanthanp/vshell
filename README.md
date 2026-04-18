@@ -1,21 +1,19 @@
 # vshell
 
-**vshell** is a programmable, application-controlled shell designed for secure environments where full system shell access is not acceptable.
-
-Instead of exposing a real OS shell, `vshell` lets you define exactly:
+A programmable shell framework for building secure, application-controlled command environments without exposing 
+production shell access. Instead of exposing a real OS shell, `vshell` lets you define exactly:
 
 * what commands exist
 * how they behave
 
-> Think of it as a **virtual shell runtime embedded inside your application**.
-> In vshell, a command is simply **application logic exposed through a shell interface**.
+---
 
 ## Modules
 
-* **core** → vshell grammar
-* **parser** → parsing & AST
-* **jvm** → Vshell on top of JVM implementation
-* **sample** → SSH server demo with basic commands
+* **core** - vshell grammar written in ANTLR
+* **parser** - parsing & AST
+* **jvm** - Vshell REPL implemented in Kotlin/JVM
+* **sample** - SSH server demo with basic commands
 
 ---
 
@@ -26,7 +24,7 @@ The sample module exposes a controlled SSH shell on `127.0.0.1:2222`
 ```bash
 git clone https://github.com/srilakshmikanthanp/vshell.git
 cd vshell
-./gradlew --no-daemon :sample:run
+./gradlew --no-daemon :vshell-sample:run
 ```
 
 Then connect to the SSH server using with default password `password`:
@@ -57,6 +55,13 @@ Exit: Bye!
 ## Vshell Grammar Cheat Sheet
 
 ```bash
+# AND execution
+echo 'hello' && echo 'world';
+# OR execution
+echo 'hello' || echo 'world';
+# pipe output
+echo 'hello' | cat;
+
 # addition
 echo %`${1 + 2}`;
 # subtraction
@@ -119,13 +124,6 @@ echo %`${'world'}`;
 
 # identifier
 echo %`${USERNAME}`;
-
-# AND execution
-echo 'hello' && echo 'world';
-# OR execution
-echo 'hello' || echo 'world';
-# pipe output
-echo 'hello' | cat;
 
 # expression substitution
 echo %`Hello ${USERNAME}`;
