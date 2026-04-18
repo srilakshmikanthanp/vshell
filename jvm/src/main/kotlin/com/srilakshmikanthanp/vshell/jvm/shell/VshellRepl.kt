@@ -37,7 +37,8 @@ class VshellRepl(
     val commandStdOut = CloseShieldOutputStream.wrap(stdOut)
     val commandStdErr = CloseShieldOutputStream.wrap(stdErr)
     val commandStdIn = CommandInputStream.wrap(CloseShieldInputStream.wrap(stdIn))
-    command.execute(commandStdIn, commandStdOut, commandStdErr)
+    val status = command.execute(commandStdIn, commandStdOut, commandStdErr)
+    context.setLastCommandExitStatus(status)
   }
 
   private fun evaluate(input: String) {

@@ -4,14 +4,11 @@ import com.srilakshmikanthanp.vshell.jvm.command.Command
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilder
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderDescriptor
 import com.srilakshmikanthanp.vshell.jvm.context.Context
+import com.srilakshmikanthanp.vshell.jvm.context.ContextVariables
 
 class SetCommand(context: Context, args: List<String>) : VariableCommand(context, args) {
-  override fun setVariable(name: String, value: String) {
-    context.setVariable(name, value)
-  }
-
-  override fun getVariables(): Map<String, String> {
-    return context.getAllVariables()
+  override fun getContextVariables(): ContextVariables {
+    return context.localVariables
   }
 
   @CommandBuilderDescriptor("set", aliases = ["SET"])

@@ -161,7 +161,7 @@ class ExecutorVisitor(
   }
 
   override fun visitIdentifier(node: IdentifierNode): ExecutionShellNode {
-    return StringLiteralShellNode(context.findReference(node.name) ?: throw ExecutorException("Variable ${node.name} not found"))
+    return StringLiteralShellNode(context.findReference(node.name)?.get() ?: throw ExecutorException("Variable ${node.name} not found"))
   }
 
   override fun visitTemplateString(node: TemplateStringNode): ExecutionShellNode {

@@ -51,7 +51,7 @@ NUMERIC_LITERAL: DIGIT+ '.' DIGIT* | '.' DIGIT+;
 SINGLE_QUOTED_STRING_LITERAL: '\'' (ESC_SEQUENCE | ~['\\\r\n])* '\'' ;
 DOUBLE_QUOTED_STRING_LITERAL: '"' (ESC_SEQUENCE | ~["\\\r\n])* '"';
 
-IDENTIFIER: ALPHA (ALPHANUMERIC | '_')*;
+IDENTIFIER: (ALPHA | '_') (ALPHANUMERIC | '_')*;
 
 COMMENT: '#' ~[\r\n]* -> skip;
 

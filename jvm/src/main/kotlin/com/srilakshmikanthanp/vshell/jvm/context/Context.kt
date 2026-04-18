@@ -1,49 +1,32 @@
 package com.srilakshmikanthanp.vshell.jvm.context
 
 import java.nio.file.Path
+import java.util.function.Supplier
 
 class Context(
   val homeDirectory: Path,
+  val environmentVariables: ContextVariables = ContextVariables(),
+  val localVariables: ContextVariables = ContextVariables(),
   val parentContext: Context? = null
 ) {
-  private val environmentVariables: MutableMap<String, String> = mutableMapOf()
-  private val localVariables: MutableMap<String, String> = mutableMapOf()
   private var currentWorkingDirectory: Path = homeDirectory
+  private var lastCommandExitStatus: Int = 0
+  private val specialVariables = ContextVariables()
 
-  fun setEnvironmentVariable(key: String, value: String) {
-    this.environmentVariables[key] = value
+  init {
+    specialVariables.set(LAST_EXIT_STATUS_VARIABLE_NAME) { this.getLastCommandExitStatus().toString() }
   }
 
-  fun removeEnvironmentVariable(key: String): Boolean {
-    return this.environmentVariables.remove(key) != null
+  fun findEnvironmentVariable(name: String): Supplier<String>? {
+    return this.environmentVariables.get(name) ?: this.parentContext?.findEnvironmentVariable(name)
   }
 
-  fun getEnvironmentVariable(key: String): String? {
-    return this.environmentVariables[key]
+  fun findVariable(name: String): Supplier<String>? {
+    return this.localVariables.get(name) ?: this.parentContext?.findVariable(name)
   }
 
-  fun findEnvironmentVariable(name: String): String? {
-    return this.environmentVariables[name] ?: this.parentContext?.findEnvironmentVariable(name)
-  }
-
-  fun getAllEnvironmentVariables(): Map<String, String> {
-    return (this.parentContext?.getAllEnvironmentVariables() ?: emptyMap()) + this.environmentVariables.toMap()
-  }
-
-  fun setVariable(key: String, value: String) {
-    this.localVariables[key] = value
-  }
-
-  fun removeVariable(key: String): Boolean {
-    return this.localVariables.remove(key) != null
-  }
-
-  fun getVariable(key: String): String? {
-    return this.localVariables[key]
-  }
-
-  fun getAllVariables(): Map<String, String> {
-    return (this.parentContext?.getAllVariables() ?: emptyMap()) + this.localVariables.toMap()
+  fun findSpecialVariable(name: String): Supplier<String>? {
+    return specialVariables.get(name)
   }
 
   fun getCurrentWorkingDirectory(): Path {
@@ -54,15 +37,21 @@ class Context(
     this.currentWorkingDirectory = path
   }
 
-  fun findVariable(name: String): String? {
-    return this.localVariables[name] ?: this.parentContext?.findVariable(name)
+  fun findReference(name: String): Supplier<String>? {
+    return this.findSpecialVariable(name) ?: this.findVariable(name) ?: this.findEnvironmentVariable(name)
   }
 
-  fun findReference(name: String): String? {
-    return this.findVariable(name) ?: this.findEnvironmentVariable(name)
+  fun setLastCommandExitStatus(status: Int) {
+    this.lastCommandExitStatus = status
+  }
+
+  fun getLastCommandExitStatus(): Int {
+    return this.lastCommandExitStatus
   }
 
   companion object {
+    const val LAST_EXIT_STATUS_VARIABLE_NAME = "_rc"
+
     fun withParentContext(parentContext: Context): Context {
       return Context(homeDirectory = parentContext.homeDirectory, parentContext = parentContext)
     }

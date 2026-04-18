@@ -32,11 +32,11 @@ class VshellSshClient(private val params: ShellParams): Runnable {
       "USERNAME" to params.session.username,
       "HOSTNAME" to hostname,
     ).forEach { (key, value) ->
-      context.setEnvironmentVariable(key, value)
+      context.environmentVariables.set(key) { value }
     }
 
     params.env.forEach { (key, value) ->
-      context.setEnvironmentVariable(key, value)
+      context.environmentVariables.set(key) { value }
     }
 
     listOf(
