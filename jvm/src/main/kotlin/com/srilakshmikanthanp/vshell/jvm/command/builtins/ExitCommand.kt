@@ -10,13 +10,18 @@ import com.srilakshmikanthanp.vshell.jvm.io.Input
 import com.srilakshmikanthanp.vshell.jvm.io.Output
 
 class ExitCommand(private val context: Context, private val args: List<String>) : AbstractTextCapableCommand {
-  override fun execute(stdIn: Input, stdOut: Output, stdErr: Output): Int {
-    val exitCode = when(args.size) {
-      1 -> args[0].toIntOrNull() ?: throw CommandException(-1, "exit: ${args[0]}: numeric argument required")
-      0 -> 0
-      else -> throw CommandException(1, "exit: too many arguments")
-    }
-    throw ExitException(exitCode, "Bye!")
+  private fun parse(args: List<String>) = when(args.size) {
+    1 -> args[0].toIntOrNull() ?: throw CommandException(-1, "exit: ${args[0]}: numeric argument required")
+    0 -> 0
+    else -> throw CommandException(1, "exit: too many arguments")
+  }
+
+  override fun execute(
+    stdIn: Input,
+    stdOut: Output,
+    stdErr: Output
+  ): Int {
+    throw ExitException(parse(args), "Bye!")
   }
 
   @CommandBuilderDescriptor("exit", aliases = ["quit"])
