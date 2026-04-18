@@ -5,3 +5,8 @@ plugins {
 rootProject.name = "vshell"
 
 include("core", "parser", "jvm", "sample")
+
+project(":core").name = "vshell-core"
+project(":parser").name = "vshell-parser"
+project(":jvm").name = "vshell-jvm"
+project(":sample").name = "vshell-sample"

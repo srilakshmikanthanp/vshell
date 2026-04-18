@@ -13,7 +13,7 @@ repositories {
 dependencies {
   implementation(platform(libs.koin.bom))
   implementation(libs.koin.core)
-  implementation(project(":parser"))
+  implementation(project(":vshell-parser"))
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.kotlin.reflect)
   implementation(libs.antlr4.runtime)

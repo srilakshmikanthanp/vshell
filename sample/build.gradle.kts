@@ -14,9 +14,9 @@ repositories {
 dependencies {
   implementation(platform(libs.koin.bom))
   implementation(libs.koin.core)
-  implementation(project(":core"))
-  implementation(project(":parser"))
-  implementation(project(":jvm"))
+  implementation(project(":vshell-core"))
+  implementation(project(":vshell-parser"))
+  implementation(project(":vshell-jvm"))
   implementation(libs.kotlinx.coroutines.core)
   implementation(libs.kotlin.reflect)
   implementation(libs.jline)

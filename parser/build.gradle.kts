@@ -17,7 +17,7 @@ dependencies {
   implementation(libs.kotlin.reflect)
   implementation(libs.antlr4.runtime)
   antlr(libs.antlr4)
-  implementation(project(":core"))
+  implementation(project(":vshell-core"))
   testImplementation(libs.kotlin.test)
   testImplementation("org.junit.jupiter:junit-jupiter-params")
 }
