@@ -1,9 +1,9 @@
 package com.srilakshmikanthanp.vshell.jvm.command.builtins.exception
 
-import com.srilakshmikanthanp.vshell.jvm.exception.ShellException
+import com.srilakshmikanthanp.vshell.parser.VshellException
 
 class ExitException(
   val status: Int,
-  message: String? = null,
+  message: String,
   cause: Throwable? = null
-): ShellException(message, cause)
+): VshellException(message, cause)

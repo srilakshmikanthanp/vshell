@@ -5,12 +5,11 @@ import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderRegistry
 import com.srilakshmikanthanp.vshell.jvm.command.builtins.exception.ExitException
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.executor.CommandsShellNode
-import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorCommandNotFoundException
-import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorException
 import com.srilakshmikanthanp.vshell.jvm.executor.ExecutorVisitor
 import com.srilakshmikanthanp.vshell.jvm.executor.substitution.StdOutSubstitutor
 import com.srilakshmikanthanp.vshell.jvm.io.CommandInputStream
 import com.srilakshmikanthanp.vshell.parser.VshellAntlrParser
+import com.srilakshmikanthanp.vshell.parser.VshellException
 import com.srilakshmikanthanp.vshell.parser.VshellParser
 import com.srilakshmikanthanp.vshell.parser.VshellSyntaxException
 import org.apache.commons.io.input.CloseShieldInputStream
@@ -52,19 +51,13 @@ class VshellRepl(
       try {
         this.evaluate(reader.read(context))
       } catch (e: VshellEndOfFileException) {
-        stdOut.println("End of Input")
+        stdOut.println(e.message)
         break
       } catch (e: ExitException) {
-        stdOut.println("Exit: ${e.message}")
+        stdOut.println(e.message)
         break
-      } catch (e: ExecutorCommandNotFoundException) {
-        stdErr.println("No such command ${e.command}")
-      } catch (e: ExecutorException) {
-        stdErr.println("Error executing command: ${e.message}")
-      } catch (e: VshellSyntaxException) {
-        stdErr.println("Syntax error: ${e.message}")
-      } catch (e: VshellInterruptException) {
-        stdOut.println("Interrupted")
+      } catch (e: VshellException) {
+        stdErr.println(e.message)
       } catch (e: Exception) {
         stdErr.println("Error: ${e.message}")
       }

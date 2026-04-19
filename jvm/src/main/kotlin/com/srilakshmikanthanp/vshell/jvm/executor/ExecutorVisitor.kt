@@ -19,7 +19,7 @@ class ExecutorVisitor(
   }
 
   override fun visitLeafCommand(node: LeafCommandNode): ExecutionShellNode {
-    val commandBuilder = commandBuilderRegistry.get(node.identifierNode.name) ?: throw ExecutorCommandNotFoundException(node.identifierNode.name)
+    val commandBuilder = commandBuilderRegistry.get(node.identifierNode.name) ?: throw ExecutorCommandNotFoundException("No such command: ${node.identifierNode.name}", node.identifierNode.name)
     val arguments = node.arguments.map { it.accept(this).asExpressionShellNode().asLiteralShellNode().asStringLiteralShellNode() }
     return CommandShellNode(commandBuilder.build(context, arguments.map { it.value }))
   }

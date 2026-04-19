@@ -13,9 +13,9 @@ class VshellSshClientReader(private val username: String, private val hostname: 
     try {
       return reader.readLine("$username@$hostname:${context.getCurrentWorkingDirectory()}> ")
     } catch (e: EndOfFileException) {
-      throw VshellEndOfFileException(e.partialLine, "EOF", e)
+      throw VshellEndOfFileException("EOF", e.partialLine, e)
     } catch (e: UserInterruptException) {
-      throw VshellInterruptException(e.partialLine, "Interrupted", e)
+      throw VshellInterruptException("Interrupted", e.partialLine, e)
     }
   }
 }
