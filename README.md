@@ -1,7 +1,6 @@
 # vshell
 
-A programmable shell framework for building secure, application-controlled command environments without exposing 
-production shell access. Instead of exposing a real OS shell, `vshell` lets you define exactly:
+A programmable shell framework for building secure, application-controlled command environments without exposing native shell access. Instead of exposing a real OS shell, `vshell` lets you define exactly:
 
 * what commands exist
 * how they behave
