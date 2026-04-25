@@ -1,12 +1,16 @@
 package com.srilakshmikanthanp.vshell.jvm.executor
 
-import com.srilakshmikanthanp.vshell.parser.ast.*
-import com.srilakshmikanthanp.vshell.jvm.command.operator.AndOperatorCommand
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderRegistry
+import com.srilakshmikanthanp.vshell.jvm.command.operator.AndOperatorCommand
 import com.srilakshmikanthanp.vshell.jvm.command.operator.OrOperatorCommand
 import com.srilakshmikanthanp.vshell.jvm.command.operator.PipeOperatorCommand
 import com.srilakshmikanthanp.vshell.jvm.context.Context
+import com.srilakshmikanthanp.vshell.jvm.context.value.DoubleVariableValue
+import com.srilakshmikanthanp.vshell.jvm.context.value.IntegerVariableValue
+import com.srilakshmikanthanp.vshell.jvm.context.value.StringVariableValue
+import com.srilakshmikanthanp.vshell.jvm.context.value.resolve
 import com.srilakshmikanthanp.vshell.jvm.executor.substitution.CommandSubstitutor
+import com.srilakshmikanthanp.vshell.parser.ast.*
 
 class ExecutorVisitor(
   private val context: Context,
@@ -161,7 +165,11 @@ class ExecutorVisitor(
   }
 
   override fun visitIdentifier(node: IdentifierNode): ExecutionShellNode {
-    return StringLiteralShellNode(context.findReference(node.name)?.get() ?: throw ExecutorException("Variable ${node.name} not found"))
+    return when (val value = context.findReference(node.name)?.resolve() ?: throw ExecutorException("Variable ${node.name} not found")) {
+      is IntegerVariableValue -> IntegerLiteralShellNode(value.value)
+      is StringVariableValue -> StringLiteralShellNode(value.value)
+      is DoubleVariableValue -> NumericLiteralShellNode(value.value)
+    }
   }
 
   override fun visitTemplateString(node: TemplateStringNode): ExecutionShellNode {

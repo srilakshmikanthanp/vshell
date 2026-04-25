@@ -1,7 +1,9 @@
 package com.srilakshmikanthanp.vshell.jvm.context
 
+import com.srilakshmikanthanp.vshell.jvm.context.value.FunctionalVariableValue
+import com.srilakshmikanthanp.vshell.jvm.context.value.StringVariableValue
+import com.srilakshmikanthanp.vshell.jvm.context.value.VariableValue
 import java.nio.file.Path
-import java.util.function.Supplier
 
 class Context(
   val homeDirectory: Path,
@@ -14,18 +16,18 @@ class Context(
   private val specialVariables = ContextVariables()
 
   init {
-    specialVariables.set(LAST_EXIT_STATUS_VARIABLE_NAME) { this.getLastCommandExitStatus().toString() }
+    specialVariables.set(LAST_EXIT_STATUS_VARIABLE_NAME, FunctionalVariableValue { StringVariableValue(this.getLastCommandExitStatus().toString()) })
   }
 
-  fun findEnvironmentVariable(name: String): Supplier<String>? {
+  fun findEnvironmentVariable(name: String): VariableValue? {
     return this.environmentVariables.get(name) ?: this.parentContext?.findEnvironmentVariable(name)
   }
 
-  fun findVariable(name: String): Supplier<String>? {
+  fun findVariable(name: String): VariableValue? {
     return this.localVariables.get(name) ?: this.parentContext?.findVariable(name)
   }
 
-  fun findSpecialVariable(name: String): Supplier<String>? {
+  fun findSpecialVariable(name: String): VariableValue? {
     return specialVariables.get(name)
   }
 
@@ -37,7 +39,7 @@ class Context(
     this.currentWorkingDirectory = path
   }
 
-  fun findReference(name: String): Supplier<String>? {
+  fun findReference(name: String): VariableValue? {
     return this.findSpecialVariable(name) ?: this.findVariable(name) ?: this.findEnvironmentVariable(name)
   }
 

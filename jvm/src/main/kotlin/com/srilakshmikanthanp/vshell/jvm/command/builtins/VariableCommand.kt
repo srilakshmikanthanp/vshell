@@ -3,6 +3,7 @@ package com.srilakshmikanthanp.vshell.jvm.command.builtins
 import com.srilakshmikanthanp.vshell.jvm.command.builtins.exception.CommandException
 import com.srilakshmikanthanp.vshell.jvm.context.Context
 import com.srilakshmikanthanp.vshell.jvm.context.ContextVariables
+import com.srilakshmikanthanp.vshell.jvm.context.value.StringVariableValue
 import com.srilakshmikanthanp.vshell.jvm.io.Input
 import com.srilakshmikanthanp.vshell.jvm.io.Output
 
@@ -11,9 +12,9 @@ abstract class VariableCommand(protected val context: Context, protected val arg
 
   override fun execute(stdIn: Input, stdOut: Output, stdErr: Output): Int {
     if (args.isEmpty()) {
-      this.getContextVariables().getAll().forEach { (key, value) -> stdOut.writer.println("$key=${value.get()}") }
+      this.getContextVariables().getAll().forEach { (key, value) -> stdOut.writer.println("$key=$value") }
     } else {
-      args.map { parse(it) }.forEach { (name, value) -> this.getContextVariables().set(name) { value } }
+      args.map { parse(it) }.forEach { (name, value) -> this.getContextVariables().set(name, StringVariableValue(value))}
     }
     return 0
   }

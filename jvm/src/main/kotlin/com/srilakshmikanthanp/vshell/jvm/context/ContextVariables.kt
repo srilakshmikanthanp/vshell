@@ -1,23 +1,19 @@
 package com.srilakshmikanthanp.vshell.jvm.context
 
-import java.util.function.Supplier
+import com.srilakshmikanthanp.vshell.jvm.context.value.VariableValue
 
 class ContextVariables {
-  private val variables = mutableMapOf<String, Supplier<String>>()
+  private val variables = mutableMapOf<String, VariableValue>()
 
-  fun set(key: String, value: Supplier<String>) {
+  fun set(key: String, value: VariableValue) {
     variables[key] = value
   }
 
-  fun set(key: String, value: String) {
-    this.set(key) { value }
-  }
-
-  fun get(key: String): Supplier<String>? {
+  fun get(key: String): VariableValue? {
     return variables[key]
   }
 
-  fun getAll(): Map<String, Supplier<String>> {
+  fun getAll(): Map<String, VariableValue> {
     return variables.toMap()
   }
 }

@@ -3,6 +3,7 @@ package com.srilakshmikanthanp.vshell.sample.ssh
 import com.srilakshmikanthanp.vshell.jvm.command.CommandBuilderMapRegistry
 import com.srilakshmikanthanp.vshell.jvm.command.builtins.*
 import com.srilakshmikanthanp.vshell.jvm.context.Context
+import com.srilakshmikanthanp.vshell.jvm.context.value.StringVariableValue
 import com.srilakshmikanthanp.vshell.jvm.event.Event
 import com.srilakshmikanthanp.vshell.jvm.event.SimpleEventBus
 import com.srilakshmikanthanp.vshell.sample.commands.*
@@ -32,11 +33,11 @@ class VshellSshClient(private val params: ShellParams): Runnable {
       "USERNAME" to params.session.username,
       "HOSTNAME" to hostname,
     ).forEach { (key, value) ->
-      context.environmentVariables.set(key) { value }
+      context.environmentVariables.set(key, StringVariableValue(value))
     }
 
     params.env.forEach { (key, value) ->
-      context.environmentVariables.set(key) { value }
+      context.environmentVariables.set(key, StringVariableValue(value))
     }
 
     listOf(
