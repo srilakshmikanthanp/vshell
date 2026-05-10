@@ -1,6 +1,6 @@
 package com.srilakshmikanthanp.vshell.jvm.context.value
 
-class IntegerVariableValue(val value: Long) : SimpleVariableValue {
+class IntegerVariableValue(override val value: Long) : NumericValue(value) {
   override fun toString(): String {
     return value.toString()
   }
